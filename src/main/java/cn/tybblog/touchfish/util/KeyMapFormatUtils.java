@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
- * °´Å¥¸ñÊ½»¯¹¤¾ßÀà
+ * æŒ‰é’®æ ¼å¼åŒ–å·¥å…·ç±»
  *
  * @author ly
  */
@@ -23,11 +23,11 @@ public class KeyMapFormatUtils {
             } else {
                 keyStr = keyStr.substring(0, keyStr.length() - 1);
             }
-            if (keyStr.indexOf("¼ıÍ·") > -1) {
-                keyStr = keyStr.replaceAll("ÏòÉÏ¼ıÍ·", "¡ü")
-                        .replaceAll("ÏòÏÂ¼ıÍ·", "¡ı")
-                        .replaceAll("ÏòÓÒ¼ıÍ·", "¡ú")
-                        .replaceAll("Ïò×ó¼ıÍ·", "¡û");
+            if (keyStr.indexOf("ç®­å¤´") > -1) {
+                keyStr = keyStr.replaceAll("å‘ä¸Šç®­å¤´", "â†‘")
+                    .replaceAll("å‘ä¸‹ç®­å¤´", "â†“")
+                    .replaceAll("å‘å³ç®­å¤´", "â†’")
+                    .replaceAll("å‘å·¦ç®­å¤´", "â†");
             }
             return keyStr;
         }else if (e instanceof MouseEvent){
@@ -35,7 +35,7 @@ public class KeyMapFormatUtils {
             if (event.getButton()<4) {
                 return "";
             }
-            return "Êó±ê²à¼ü"+(event.getButton()-3);
+            return "é¼ æ ‡ä¾§é”®"+(event.getButton()-3);
         }
         return "";
     }

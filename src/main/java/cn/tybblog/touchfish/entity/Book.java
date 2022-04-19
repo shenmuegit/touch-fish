@@ -13,7 +13,7 @@ import java.util.List;
 public class Book {
     private String url;
     private String bookName;
-    public static String FILE_AUTH="×Ô¶¨Òåµ¼Èë";
+    public static String FILE_AUTH="è‡ªå®šä¹‰å¯¼å…¥";
     private String auth;
     private Integer index;
     private List<Chapter> chapters;
@@ -73,12 +73,12 @@ public class Book {
     }
 
     /**
-     * »ñÈ¡µ±Ç°ÕÂ½Ú
+     * è·å–å½“å‰ç« èŠ‚
      * @return
      */
     public Chapter getChapterByIndex() throws FishException {
         if (chapters==null||chapters.size()==0){
-            FishException.throwFishException("ÕÂ½ÚÎª¿Õ");
+            FishException.throwFishException("ç« èŠ‚ä¸ºç©º");
         }
         if(index>=chapters.size()){
             index=chapters.size()-1;
@@ -87,18 +87,18 @@ public class Book {
     }
 
     /**
-     * ¼ÓÔØÕÂ½Ú
-     * @param callback Òì²½»Øµ÷ÎÄÕÂÄÚÈİ
-     * @return ÎÄÕÂÄÚÈİ
+     * åŠ è½½ç« èŠ‚
+     * @param callback å¼‚æ­¥å›è°ƒæ–‡ç« å†…å®¹
+     * @return æ–‡ç« å†…å®¹
      */
     public List<String> loadChapter(ChapterCallback callback,String baseMethod) throws FishException {
         List<String> bookText = new ArrayList<>();
         Chapter chapter = getChapterByIndex();
         if (chapter==null){
-            FishException.throwFishException("ÕÂ½ÚÎª¿Õ£¬ÇëÖØĞÂÌí¼Ó");
+            FishException.throwFishException("ç« èŠ‚ä¸ºç©ºï¼Œè¯·é‡æ–°æ·»åŠ ");
         }
         if (!auth.equals(FILE_AUTH)&&index>=chapters.size()-1){
-            //ÍøÂçÊé¼®£¬»ñÈ¡×îĞÂÕÂ½Ú£¬¿ÉÄÜÕıÔÚ¸üĞÂ
+            //ç½‘ç»œä¹¦ç±ï¼Œè·å–æœ€æ–°ç« èŠ‚ï¼Œå¯èƒ½æ­£åœ¨æ›´æ–°
             chapters=NetworkUtil.getChapter(url);
             chapter = getChapterByIndex();
         }
@@ -110,15 +110,15 @@ public class Book {
             }
         } else {
             NetworkUtil.getBookText(chapter.getUrl(),callback,baseMethod);
-            FishException.throwFishException("¼ÓÔØÖĞ...");
+            FishException.throwFishException("åŠ è½½ä¸­...");
         }
         return bookText;
     }
 
     /**
-     * ÏÂÒ»ÕÂ
-     * @param callback Òì²½»Øµ÷ÎÄÕÂÄÚÈİ
-     * @return ÎÄÕÂÄÚÈİ
+     * ä¸‹ä¸€ç« 
+     * @param callback å¼‚æ­¥å›è°ƒæ–‡ç« å†…å®¹
+     * @return æ–‡ç« å†…å®¹
      */
     public List<String> nextChapter(ChapterCallback callback) throws FishException {
         if(index>=chapters.size()){
@@ -129,13 +129,13 @@ public class Book {
     }
 
     /**
-     * ÉÏÒ»ÕÂ
-     * @param callback Òì²½»Øµ÷ÎÄÕÂÄÚÈİ
-     * @return ÎÄÕÂÄÚÈİ
+     * ä¸Šä¸€ç« 
+     * @param callback å¼‚æ­¥å›è°ƒæ–‡ç« å†…å®¹
+     * @return æ–‡ç« å†…å®¹
      */
     public List<String> preChapter(ChapterCallback callback) throws FishException {
         if(index<0){
-            FishException.throwFishException("µ½¶¥ÁËÅ¶");
+            FishException.throwFishException("åˆ°é¡¶äº†å“¦");
         }
         index--;
         return loadChapter(callback,BASE_METHOD_PRE);
@@ -145,7 +145,7 @@ public class Book {
         if (index<chapters.size()) {
             index++;
         } else {
-            return "ÒÑ¾­ÊÇ×îºóÒ»ÕÂÁË";
+            return "å·²ç»æ˜¯æœ€åä¸€ç« äº†";
         }
         getChapterByIndex().setRow(-1);
         return getChapterByIndex().getTitle();
@@ -153,7 +153,7 @@ public class Book {
 
     public String preIndex() throws FishException {
         if(index<0){
-            return "ÒÑ¾­ÊÇµÚÒ»ÕÂÁË";
+            return "å·²ç»æ˜¯ç¬¬ä¸€ç« äº†";
         }
         index--;
         getChapterByIndex().setRow(-1);

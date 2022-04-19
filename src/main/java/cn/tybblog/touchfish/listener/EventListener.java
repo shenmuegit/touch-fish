@@ -28,24 +28,24 @@ import java.util.TimerTask;
 
 public class EventListener implements KeyEventPostProcessor, AWTEventListener, ChapterCallback {
     private PersistentState persistentState = PersistentState.getInstance();
-    /** ¿ØÖÆÌ¨ */
+    /** æ§åˆ¶å° */
     private StatusBar statusBar;
-    /** µ±Ç°Êé¼® */
+    /** å½“å‰ä¹¦ç± */
     public static Book book;
-    /** ÀÏ°å¼ü */
+    /** è€æ¿é”® */
     private boolean flag = false;
-    /** ¿ØÖÆÌ¨³¤¶È·Ö³öµÄ»º´æĞĞ */
+    /** æ§åˆ¶å°é•¿åº¦åˆ†å‡ºçš„ç¼“å­˜è¡Œ */
     private List<String> cacheRow;
-    /** »º´æĞĞË÷Òı */
+    /** ç¼“å­˜è¡Œç´¢å¼• */
     private int cacheIndex = -1;
-    /** µ±Ç°ÕÂ½ÚÎÄÕÂ */
+    /** å½“å‰ç« èŠ‚æ–‡ç«  */
     private List<String> bookText;
-    /** ¼ÓÔØÖĞ */
+    /** åŠ è½½ä¸­ */
     public static boolean loading=false;
-    /** ¶¨Ê±Ö´ĞĞ */
+    /** å®šæ—¶æ‰§è¡Œ */
     private Timer timer;
 
-    public static String LOADING_TEXT = "¼ÓÔØÖĞ...";
+    public static String LOADING_TEXT = "åŠ è½½ä¸­...";
 
     public EventListener(Project project){
         statusBar = WindowManager.getInstance().getStatusBar(project);
@@ -90,7 +90,7 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
                 ConsoleUtils.setStatusBar(statusBar);
             }
             try {
-                doRead("Êó±ê²à¼ü"+(e.getButton()-3));
+                doRead("é¼ æ ‡ä¾§é”®"+(e.getButton()-3));
             } catch (FishException fishException) {
                 ConsoleUtils.info(fishException.getMessage());
                 EventListener.loading=false;
@@ -165,7 +165,7 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ³õÊ¼»¯Êé±¾
+     * åˆå§‹åŒ–ä¹¦æœ¬
      * @throws FishException
      */
     public void initBook() throws FishException {
@@ -180,7 +180,7 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ÉÏÒ»ÕÂ
+     * ä¸Šä¸€ç« 
      */
     private void preChapter(){
         try {
@@ -192,7 +192,7 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ÏÂÒ»ÕÂ
+     * ä¸‹ä¸€ç« 
      */
     private void nextChapter(){
         try {
@@ -204,8 +204,8 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ÉÏÒ»ĞĞ
-     * @return ÊÇ·ñ¼ÓÔØ³É¹¦
+     * ä¸Šä¸€è¡Œ
+     * @return æ˜¯å¦åŠ è½½æˆåŠŸ
      */
     private void preInfo() throws FishException {
         Chapter chapter = persistentState.getBookByIndex().getChapterByIndex();
@@ -219,8 +219,8 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ÏÂÒ»ĞĞ
-     * @return ÊÇ·ñ¼ÓÔØ³É¹¦
+     * ä¸‹ä¸€è¡Œ
+     * @return æ˜¯å¦åŠ è½½æˆåŠŸ
      */
     private void nextInfo() throws FishException {
         Chapter chapter = persistentState.getBookByIndex().getChapterByIndex();
@@ -236,7 +236,7 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ÉÏÒ»ĞĞ»º´æ
+     * ä¸Šä¸€è¡Œç¼“å­˜
      */
     private void preCacheRow() throws FishException {
         if (cacheRow == null || cacheRow.size() == 0 || cacheIndex < 1) {
@@ -247,9 +247,9 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ÏÂÒ»ĞĞ»º´æ
+     * ä¸‹ä¸€è¡Œç¼“å­˜
      *
-     * @return ÊÇ·ñÓĞ»º´æ
+     * @return æ˜¯å¦æœ‰ç¼“å­˜
      */
     private void nextCacheRow() throws FishException {
         if (cacheRow == null || cacheRow.size() == 0 || cacheIndex+1 >= cacheRow.size()) {
@@ -260,18 +260,18 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * ÏÔÊ¾»º´æĞĞ
+     * æ˜¾ç¤ºç¼“å­˜è¡Œ
      */
     private void showCacheRow(){
         if (cacheRow == null || cacheRow.size() == 0 || cacheIndex < 0 || cacheIndex >= cacheRow.size()) {
-            ConsoleUtils.info("¼ÓÔØ»º´æĞĞÊ±Óöµ½Î´Öª´íÎó");
+            ConsoleUtils.info("åŠ è½½ç¼“å­˜è¡Œæ—¶é‡åˆ°æœªçŸ¥é”™è¯¯");
             return;
         }
         ConsoleUtils.info(cacheRow.get(cacheIndex));
     }
 
     /**
-     * ¸ù¾İ¿ØÖÆÌ¨³¤¶È·Ö¸î×Ö·û´®
+     * æ ¹æ®æ§åˆ¶å°é•¿åº¦åˆ†å‰²å­—ç¬¦ä¸²
      */
     private void splitBookText(int row){
         if (persistentState.getIsConsole()){
@@ -282,8 +282,8 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
     }
 
     /**
-     * »ñÈ¡¿ØÖÆÌ¨¿ÉÏÔÊ¾³¤¶È
-     * @return ¿ØÖÆÌ¨¿ÉÏÔÊ¾³¤¶È
+     * è·å–æ§åˆ¶å°å¯æ˜¾ç¤ºé•¿åº¦
+     * @return æ§åˆ¶å°å¯æ˜¾ç¤ºé•¿åº¦
      */
     private int getConsoleLen(){
         int textLen = 0;
@@ -293,16 +293,16 @@ public class EventListener implements KeyEventPostProcessor, AWTEventListener, C
             textLen = width / 17;
         }
         if(textLen==0){
-            MessageDialogBuilder.yesNo("ÌáÊ¾", "×Ô¶¯»ñÈ¡¿ØÖÆÌ¨³¤¶ÈÊ±³ö´í").show();
+            MessageDialogBuilder.yesNo("æç¤º", "è‡ªåŠ¨è·å–æ§åˆ¶å°é•¿åº¦æ—¶å‡ºé”™").show();
             textLen=10;
         }
         return textLen;
     }
 
     /**
-     * Òì²½»Øµ÷
-     * @param bookText Êé±¾ÄÚÈİ
-     * @param baseMethod À´Ô´·½·¨
+     * å¼‚æ­¥å›è°ƒ
+     * @param bookText ä¹¦æœ¬å†…å®¹
+     * @param baseMethod æ¥æºæ–¹æ³•
      */
     @Override
     public void chapter(List<String> bookText, String baseMethod) throws FishException {

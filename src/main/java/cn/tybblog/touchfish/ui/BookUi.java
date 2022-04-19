@@ -43,7 +43,7 @@ public class BookUi extends FishDialog {
                     }
                     Book book = books.get(row);
                     if (!persistentState.addBook(book)) {
-                        MessageDialogBuilder.YesNo msg = MessageDialogBuilder.yesNo("提示", "此书已在书架中！");
+                        MessageDialogBuilder.YesNo msg = MessageDialogBuilder.yesNo("鎻愮ず", "姝や功宸插湪涔︽灦涓紒");
                         if (!msg.isYes()) {
                             return;
                         }
@@ -52,7 +52,7 @@ public class BookUi extends FishDialog {
                 }
             }
         });
-        //加载中图标初始化
+        //鍔犺浇涓浘鏍囧垵濮嬪寲
         myLoadingIcon.setOpaque(true);
         myLoadingIcon.setPaintPassiveIcon(false);
         myLoadingIcon.setVisible(false);
@@ -74,7 +74,7 @@ public class BookUi extends FishDialog {
         if (myTextField.getText() == null || "".equals(myTextField.getText())) {
             return;
         }
-        //获取书籍
+        //鑾峰彇涔︾睄
         books = NetworkUtil.SearchBook(myTextField.getText());
         bookTale.setModel(JtableDataUtils.bookToTableModel(books));
         myLoadingIcon.setVisible(false);

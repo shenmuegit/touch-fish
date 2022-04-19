@@ -23,28 +23,28 @@ import java.util.List;
  * @author ly
  */
 @State(
-        name = "PersistentState",
-        storages = {@Storage(
-                value = "touch-fish.xml"
-        )}
+    name = "PersistentState",
+    storages = {@Storage(
+        value = "touch-fish.xml"
+    )}
 )
 public class PersistentState implements PersistentStateComponent<PersistentState> {
 
-    /** Êé¼Ü */
+    /** ä¹¦æ¶ */
     private List<Book> book;
-    /** ÈÈ¼ü */
+    /** çƒ­é”® */
     private String[] key;
-    /** Êé¼ÜË÷Òı  */
+    /** ä¹¦æ¶ç´¢å¼•  */
     private Integer bookIndex;
-    /** V1.5 ĞÂÔö Êı¾İÔ´ */
+    /** V1.5 æ–°å¢ æ•°æ®æº */
     private String url;
-    /** ÊÇ·ñÊ¹ÓÃ¿ØÖÆÌ¨ */
+    /** æ˜¯å¦ä½¿ç”¨æ§åˆ¶å° */
     private boolean isConsole;
-    /** ×Ô¶¯·­Ò³ */
+    /** è‡ªåŠ¨ç¿»é¡µ */
     private Integer nextInfoTime;
-    /** ×ÖÌå´óĞ¡ */
+    /** å­—ä½“å¤§å° */
     private String fontStyle;
-    /** ÕÂ½ÚµÄÕıÔòÆ¥Åä */
+    /** ç« èŠ‚çš„æ­£åˆ™åŒ¹é… */
     private String regexpStr;
 
     public String getFontStyle() {
@@ -104,9 +104,9 @@ public class PersistentState implements PersistentStateComponent<PersistentState
     }
 
     /**
-     * ĞÂÔöÊé
+     * æ–°å¢ä¹¦
      * @param book
-     * @return ÊÇ·ñĞÂÔö³É¹¦
+     * @return æ˜¯å¦æ–°å¢æˆåŠŸ
      */
     public boolean addBook(Book book) {
         if (this.book ==null) {
@@ -117,11 +117,11 @@ public class PersistentState implements PersistentStateComponent<PersistentState
                 return false;
             }
         }
-        //×Ô¶¨Òåµ¼ÈëÊé¼®·Ö¸îÎÄ¼ş
+        //è‡ªå®šä¹‰å¯¼å…¥ä¹¦ç±åˆ†å‰²æ–‡ä»¶
         if (Book.FILE_AUTH.equals(book.getAuth())) {
             Book split = FileSplitUtils.split(book);
             if (split==null) {
-                MessageDialogBuilder.yesNo("ÌáÊ¾","·Ö¸îÎÄ¼şÊ§°Ü").show();
+                MessageDialogBuilder.yesNo("æç¤º","åˆ†å‰²æ–‡ä»¶å¤±è´¥").show();
                 return false;
             }
             book=split;
@@ -133,9 +133,9 @@ public class PersistentState implements PersistentStateComponent<PersistentState
     }
 
     /**
-     * É¾³ıÊé¼®
-     * @param index Ë÷Òı
-     * @return ÊÇ·ñÉ¾³ı³É¹¦
+     * åˆ é™¤ä¹¦ç±
+     * @param index ç´¢å¼•
+     * @return æ˜¯å¦åˆ é™¤æˆåŠŸ
      */
     public boolean delBook(int index){
         if (index<0||index>book.size()) {
@@ -154,7 +154,7 @@ public class PersistentState implements PersistentStateComponent<PersistentState
     }
 
     /**
-     * ¸üĞÂÈÈ¼ü
+     * æ›´æ–°çƒ­é”®
      * @param key
      * @param index
      */
@@ -164,12 +164,12 @@ public class PersistentState implements PersistentStateComponent<PersistentState
 
 
     /**
-     * »ñÈ¡µ±Ç°Ñ¡ÖĞÊé¼®
-     * @return µ±Ç°Ñ¡ÖĞÊé¼®
+     * è·å–å½“å‰é€‰ä¸­ä¹¦ç±
+     * @return å½“å‰é€‰ä¸­ä¹¦ç±
      */
     public Book getBookByIndex() throws FishException {
         if(book==null||book.size()==0){
-            FishException.throwFishException("Êé¼ÜÖĞ»¹Ã»ÓĞÊé,¸Ï½ôÈ¥Ìí¼Ó°É£¡");
+            FishException.throwFishException("ä¹¦æ¶ä¸­è¿˜æ²¡æœ‰ä¹¦,èµ¶ç´§å»æ·»åŠ å§ï¼");
         }
         if (bookIndex<0 || bookIndex>=book.size()){
             this.bookIndex=book.size()-1;

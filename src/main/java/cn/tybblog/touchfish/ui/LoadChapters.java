@@ -28,11 +28,11 @@ public class LoadChapters extends FishDialog {
         setContentPane(panel1);
         setModal(true);
         if (bookIndex<0||bookIndex>=persistentState.getBook().size()) {
-            MessageDialogBuilder.yesNo("ÌáÊ¾", "´ËÊéÒÑ±»É¾³ı£¡").show();
+            MessageDialogBuilder.yesNo("æç¤º", "æ­¤ä¹¦å·²è¢«åˆ é™¤ï¼").show();
             onCancel();
         }
         if(persistentState.getBook().get(bookIndex).getChapters()==null){
-            MessageDialogBuilder.yesNo("ÌáÊ¾", "ÇëÏÈÔÄ¶Á»ñÈ¡ÕÂ½ÚºóÔÙÑ¡ÔñÕÂ½Ú").show();
+            MessageDialogBuilder.yesNo("æç¤º", "è¯·å…ˆé˜…è¯»è·å–ç« èŠ‚åå†é€‰æ‹©ç« èŠ‚").show();
             onCancel();
         }
         searchName.setText("");
@@ -44,7 +44,7 @@ public class LoadChapters extends FishDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    MessageDialogBuilder.YesNo msg = MessageDialogBuilder.yesNo("ÌáÊ¾", "È·¶¨ÒªÇĞ»»ÖÁ "+chaptersJList.getSelectedValue()+" Âğ£¿");
+                    MessageDialogBuilder.YesNo msg = MessageDialogBuilder.yesNo("æç¤º", "ç¡®å®šè¦åˆ‡æ¢è‡³ "+chaptersJList.getSelectedValue()+" å—ï¼Ÿ");
                     if(msg.isYes()) {
                         persistentState.getBook().get(bookIndex).setIndex(chaptersJList.getSelectedIndex()-1);
                         onCancel();
@@ -64,7 +64,7 @@ public class LoadChapters extends FishDialog {
     private void searchTitle(int bookIndex) {
         String titleTxt = searchName.getText();
 
-        // Æ¥ÅäÕÂ½ÚÃû³Æ
+        // åŒ¹é…ç« èŠ‚åç§°
         List<Chapter> list = persistentState.getBook().get(bookIndex).getChapters();
         if (titleTxt == null || "".equals(titleTxt)) {
             chaptersJList.setListData(list.toArray());

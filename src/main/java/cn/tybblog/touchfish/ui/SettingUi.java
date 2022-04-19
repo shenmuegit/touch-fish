@@ -48,7 +48,7 @@ public class SettingUi {
         bookTableInit();
         keyMapInit();
         addBtnInit();
-        //¿ØÖÆÌ¨×ÖÌåÑùÊ½
+        //æ§åˆ¶å°å­—ä½“æ ·å¼
         fontStyleTextArea.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             protected void textChanged(@NotNull DocumentEvent e) {
@@ -59,12 +59,12 @@ public class SettingUi {
             persistentState.setFontStyle("{font-size: 10px;}");
         }
         fontStyleTextArea.setText(persistentState.getFontStyle());
-        //¿ØÖÆÌ¨ÏÂÀ­¿ò
+        //æ§åˆ¶å°ä¸‹æ‹‰æ¡†
         isConsoleCheck.setSelectedIndex(persistentState.getIsConsole()?0:1);
-        isConsoleCheck.addItemListener(e -> persistentState.setIsConsole("ÊÇ".equals(e.getItem())));
-        //ÎÄ¼şÑ¡ÔñÆ÷
-        filePath.addBrowseFolderListener("Ñ¡ÔñÊé¼®", null, null, new FileChooserDescriptor(true, false, false, false, false, false));
-        //ĞÂÔöÊé¼®°´Å¥µ¯´°
+        isConsoleCheck.addItemListener(e -> persistentState.setIsConsole("æ˜¯".equals(e.getItem())));
+        //æ–‡ä»¶é€‰æ‹©å™¨
+        filePath.addBrowseFolderListener("é€‰æ‹©ä¹¦ç±", null, null, new FileChooserDescriptor(true, false, false, false, false, false));
+        //æ–°å¢ä¹¦ç±æŒ‰é’®å¼¹çª—
         searchBtn.addActionListener(e -> {
             BookUi dialog = new BookUi();
             dialog.initUI();
@@ -76,7 +76,7 @@ public class SettingUi {
                 }
             });
         });
-        //É¾³ıÊé¼®°´Å¥
+        //åˆ é™¤ä¹¦ç±æŒ‰é’®
         delButton.addActionListener(e -> {
             if (persistentState.delBook(bookTable.getSelectedRow())) {
                 updBookReading();
@@ -84,7 +84,7 @@ public class SettingUi {
                 EventListener.book=null;
             }
         });
-        //Ñ¡ÖĞÊé¼®°´Å¥
+        //é€‰ä¸­ä¹¦ç±æŒ‰é’®
         selectBtn.addActionListener(e -> {
             int selectedRow = bookTable.getSelectedRow();
             if (selectedRow > -1) {
@@ -93,7 +93,7 @@ public class SettingUi {
                 updBookReading();
             }
         });
-        //¶¨Ê±Æ÷Ê±¼äÉèÖÃ
+        //å®šæ—¶å™¨æ—¶é—´è®¾ç½®
         nextInfoTime.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             protected void textChanged(@NotNull DocumentEvent e) {
@@ -101,7 +101,7 @@ public class SettingUi {
                     persistentState.setNextInfoTime(Integer.valueOf(nextInfoTime.getText()));
                     updBookReading();
                 } else {
-                    bookReading.setText("ÇëÊäÈëÕıÈ·µÄÊı×Ö");
+                    bookReading.setText("è¯·è¾“å…¥æ­£ç¡®çš„æ•°å­—");
                 }
             }
         });
@@ -111,69 +111,69 @@ public class SettingUi {
         nextInfoTime.setText(persistentState.getNextInfoTime().toString());
         String[] key = persistentState.getKey();
         if (key == null) {
-            key = new String[]{"Alt+¡û", "Alt+¡ú", "Ctrl+1", "Ctrl+2", "Shift+¡ü","Shift+¡ı"};
+            key = new String[]{"Alt+â†", "Alt+â†’", "Ctrl+1", "Ctrl+2", "Shift+â†‘","Shift+â†“"};
             persistentState.setKey(key);
         }
         updBookReading();
         bookDataInit();
         updKeyMap();
-        // ÕÂ½ÚÃûÆ¥ÅäÊäÈë¿ò
+        // ç« èŠ‚ååŒ¹é…è¾“å…¥æ¡†
         regexpStrInput();
     }
 
     /**
-     * ÕÂ½ÚÃûÕıÔòÆ¥ÅäÊäÈë¿ò
+     * ç« èŠ‚åæ­£åˆ™åŒ¹é…è¾“å…¥æ¡†
      * @author      wyj
      * @date        2021/12/7 17:57
      */
     private void regexpStrInput() {
-        //¶¨Ê±Æ÷Ê±¼äÉèÖÃ
+        //å®šæ—¶å™¨æ—¶é—´è®¾ç½®
         regexpStr.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             protected void textChanged(@NotNull DocumentEvent e) {
                 if (!"".equals(regexpStr.getText())) {
                     persistentState.setRegexpStr(regexpStr.getText());
                 } else {
-                    persistentState.setRegexpStr("(^\\s*µÚ)(.{1,9})[ÕÂ½Ú¾í¼¯²¿Æª»Ø](\\s{1})(.*)($\\s*)");
+                    persistentState.setRegexpStr("(^\\s*ç¬¬)(.{1,9})[ç« èŠ‚å·é›†éƒ¨ç¯‡å›](\\s{1})(.*)($\\s*)");
                 }
             }
         });
         if (persistentState.getRegexpStr()==null||"".equals(persistentState.getRegexpStr())){
-            persistentState.setRegexpStr("(^\\s*µÚ)(.{1,9})[ÕÂ½Ú¾í¼¯²¿Æª»Ø](\\s{1})(.*)($\\s*)");
+            persistentState.setRegexpStr("(^\\s*ç¬¬)(.{1,9})[ç« èŠ‚å·é›†éƒ¨ç¯‡å›](\\s{1})(.*)($\\s*)");
         }
         regexpStr.setText(persistentState.getRegexpStr());
     }
 
     /**
-     * µ¼Èë°´Å¥³õÊ¼»¯
+     * å¯¼å…¥æŒ‰é’®åˆå§‹åŒ–
      */
     private void addBtnInit(){
         addBtn.addActionListener(e -> {
             if (filePath.getText() == null || "".equals(filePath.getText()) || !filePath.getText().substring(filePath.getText().lastIndexOf('.')).equals(".txt")) {
-                MessageDialogBuilder.yesNo("ÌáÊ¾", "ÇëÑ¡ÔñÕıÈ·µÄÎÄ¼ş(±ØĞëÎªtxt)").show();
+                MessageDialogBuilder.yesNo("æç¤º", "è¯·é€‰æ‹©æ­£ç¡®çš„æ–‡ä»¶(å¿…é¡»ä¸ºtxt)").show();
                 return;
             }
             File file = new File(filePath.getText());
             if (file.exists()) {
                 String fileName = file.getName().substring(0, file.getName().lastIndexOf('.'));
-                Book book = new Book(filePath.getText(), fileName, "×Ô¶¨Òåµ¼Èë");
-                bookReading.setText("ÕıÔÚ½âÎöÕÂ½Ú£¬µ¼ÈëÖĞ...");
+                Book book = new Book(filePath.getText(), fileName, "è‡ªå®šä¹‰å¯¼å…¥");
+                bookReading.setText("æ­£åœ¨è§£æç« èŠ‚ï¼Œå¯¼å…¥ä¸­...");
                 new Thread(() -> {
                     persistentState.addBook(book);
                     updBookReading();
                     bookDataInit();
                 }).start();
             } else {
-                MessageDialogBuilder.yesNo("ÌáÊ¾", "ÎÄ¼ş²»´æÔÚ£¬ÇëÑ¡ÔñÕıÈ·µÄÎÄ¼ş").show();
+                MessageDialogBuilder.yesNo("æç¤º", "æ–‡ä»¶ä¸å­˜åœ¨ï¼Œè¯·é€‰æ‹©æ­£ç¡®çš„æ–‡ä»¶").show();
             }
         });
     }
 
     /**
-     * ÈÈ¼ü±í¸ñ³õÊ¼»¯
+     * çƒ­é”®è¡¨æ ¼åˆå§‹åŒ–
      */
     private void keyMapInit(){
-        //Êó±ê¼àÌıÊÂ¼ş
+        //é¼ æ ‡ç›‘å¬äº‹ä»¶
         keyMap.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -192,7 +192,7 @@ public class SettingUi {
                 }
             }
         });
-        //¼üÅÌ¼àÌıÊÂ¼ş
+        //é”®ç›˜ç›‘å¬äº‹ä»¶
         keyMap.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -212,35 +212,35 @@ public class SettingUi {
     }
 
     /**
-     * ¸üĞÂÈÈ¼ü
+     * æ›´æ–°çƒ­é”®
      */
     private void updKeyMap() {
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("name", new String[]{"ÉÏÒ»ĞĞÈÈ¼ü", "ÏÂÒ»ĞĞÈÈ¼ü", "ÉÏÒ»ÕÂÈÈ¼ü", "ÏÂÒ»ÕÂÈÈ¼ü", "Æô¶¯/Í£Ö¹×Ô¶¯·­Ò³","ÏÔÊ¾/Òş²ØÈÈ¼ü"});
+        model.addColumn("name", new String[]{"ä¸Šä¸€è¡Œçƒ­é”®", "ä¸‹ä¸€è¡Œçƒ­é”®", "ä¸Šä¸€ç« çƒ­é”®", "ä¸‹ä¸€ç« çƒ­é”®", "å¯åŠ¨/åœæ­¢è‡ªåŠ¨ç¿»é¡µ","æ˜¾ç¤º/éšè—çƒ­é”®"});
         model.addColumn("key", persistentState.getKey());
         keyMap.setModel(model);
     }
 
     /**
-     * ÕıÔÚÔÄ¶ÁµÄÊé¼®
+     * æ­£åœ¨é˜…è¯»çš„ä¹¦ç±
      */
     private void updBookReading() {
         List<Book> books = persistentState.getBook();
         if (books==null||books.size()==0){
-            bookReading.setText("Êé¼ÜÖĞ»¹Ã»ÓĞÊé,¸Ï½ôÈ¥Ìí¼Ó°É£¡");
+            bookReading.setText("ä¹¦æ¶ä¸­è¿˜æ²¡æœ‰ä¹¦,èµ¶ç´§å»æ·»åŠ å§ï¼");
             return;
         }
         Book book = null;
         try {
             book = persistentState.getBookByIndex();
         } catch (FishException e) {
-            MessageDialogBuilder.yesNo("ÌáÊ¾", e.getMessage()).show();
+            MessageDialogBuilder.yesNo("æç¤º", e.getMessage()).show();
             return;
         }
-        String text = "<html>µ±Ç°ÔÄ¶ÁÊé¼®£º" + book.getBookName();
+        String text = "<html>å½“å‰é˜…è¯»ä¹¦ç±ï¼š" + book.getBookName();
         if (book.getChapters() != null && book.getChapters().size() > 0) {
             try {
-                text += "ÕıÔÚÔÄ¶Á£º" + book.getChapterByIndex().getTitle() + "</html>";
+                text += "æ­£åœ¨é˜…è¯»ï¼š" + book.getChapterByIndex().getTitle() + "</html>";
             } catch (FishException e) {
             }
         }
@@ -248,7 +248,7 @@ public class SettingUi {
     }
 
     /**
-     * ³õÊ¼»¯UI
+     * åˆå§‹åŒ–UI
      */
     private void createUIComponents() {
         bookTable = new JCTable();
@@ -259,23 +259,23 @@ public class SettingUi {
     }
 
     /**
-     * Êı¾İÔ´ÎÄ±¾¿ò³õÊ¼»¯
+     * æ•°æ®æºæ–‡æœ¬æ¡†åˆå§‹åŒ–
      */
     private void urlFieldInit() {
         if (persistentState.getUrl() == null) {
-            persistentState.setUrl("http://www.xbiquge.la");
+            persistentState.setUrl("https://m.biqugg.com");
         }
-        urlField.setText(persistentState.getUrl());
+        urlField.setText("https://m.biqugg.com");
         urlField.getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
             protected void textChanged(@NotNull DocumentEvent e) {
-                persistentState.setUrl(urlField.getText());
+                persistentState.setUrl("https://m.biqugg.com");
             }
         });
     }
 
     /**
-     * Êé¼ÜÊı¾İ³õÊ¼»¯
+     * ä¹¦æ¶æ•°æ®åˆå§‹åŒ–
      */
     private void bookTableInit() {
         bookDataInit();
@@ -299,7 +299,7 @@ public class SettingUi {
     }
 
     /**
-     * Êé±¾Êı¾İ³õÊ¼»¯
+     * ä¹¦æœ¬æ•°æ®åˆå§‹åŒ–
      */
     private void bookDataInit() {
         List<Book> books = persistentState.getBook();

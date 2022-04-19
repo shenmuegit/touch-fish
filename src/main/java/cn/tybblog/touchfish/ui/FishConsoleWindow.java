@@ -13,9 +13,6 @@ import java.awt.*;
 
 public class FishConsoleWindow implements ToolWindowFactory {
 
-    /**
-     * 正文内容显示
-     **/
     private JLabel bookReadingText;
 
     @Override
@@ -26,9 +23,6 @@ public class FishConsoleWindow implements ToolWindowFactory {
         ConsoleUtils.putJLabel(project,bookReadingText);
     }
 
-    /**
-     * 初始化
-     **/
     private JPanel initPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());

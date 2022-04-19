@@ -28,7 +28,7 @@ public class SearchTextField extends JPanel {
         myTextField = new JTextField();
         list = new JList<>();
         myTextField.setForeground(Color.GRAY);
-        myTextField.setText("ÇëÊäÈëÊéÃû");
+        myTextField.setText("è¯·è¾“å…¥ä¹¦å");
         myTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -79,9 +79,9 @@ public class SearchTextField extends JPanel {
         myTextField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                //»ñÈ¡½¹µãÊ±£¬Çå¿ÕÌáÊ¾ÄÚÈİ
+                //è·å–ç„¦ç‚¹æ—¶ï¼Œæ¸…ç©ºæç¤ºå†…å®¹
                 String temp = myTextField.getText();
-                if (temp.equals("ÇëÊäÈëÊéÃû")) {
+                if (temp.equals("è¯·è¾“å…¥ä¹¦å")) {
                     myTextField.setText("");
                     myTextField.setForeground(Color.BLACK);
                 }
@@ -89,11 +89,11 @@ public class SearchTextField extends JPanel {
 
             @Override
             public void focusLost(FocusEvent e) {
-                //Ê§È¥½¹µãÊ±£¬Ã»ÓĞÊäÈëÄÚÈİ£¬ÏÔÊ¾ÌáÊ¾ÄÚÈİ
+                //å¤±å»ç„¦ç‚¹æ—¶ï¼Œæ²¡æœ‰è¾“å…¥å†…å®¹ï¼Œæ˜¾ç¤ºæç¤ºå†…å®¹
                 String temp = myTextField.getText();
                 if (temp.equals("")) {
                     myTextField.setForeground(Color.GRAY);
-                    myTextField.setText("ÇëÊäÈëÊéÃû");
+                    myTextField.setText("è¯·è¾“å…¥ä¹¦å");
                 }
             }
         });
@@ -154,9 +154,9 @@ public class SearchTextField extends JPanel {
         list.setListData(strings);
         if (myPopup == null || !myPopup.isVisible()) {
             myPopup = JBPopupFactory.getInstance().createListPopupBuilder(list)
-                    .setMovable(false)
-                    .setRequestFocus(false)
-                    .setItemChoosenCallback(createItemChosenCallback(list)).createPopup();
+                .setMovable(false)
+                .setRequestFocus(false)
+                .setItemChoosenCallback(createItemChosenCallback(list)).createPopup();
             myPopup.showUnderneathOf(getPopupLocationComponent());
         }
         Dimension size = myPopup.getSize();

@@ -2,23 +2,23 @@ package cn.tybblog.touchfish.util;
 
 public interface ReadBook {
     /**
-     * иор╩уб
+     * Д╦┼Д╦─Г╚═
      */
     void preChapter();
     /**
-     * обр╩уб
+     * Д╦▀Д╦─Г╚═
      */
     void nextChapter();
     /**
-     * ЁУй╪╩╞
+     * Е┬²Е╖▀Е▄√
      */
     void info();
     /**
-     * обр╩пп
+     * Д╦▀Д╦─Х║▄
      */
     void nextInfo();
     /**
-     * иор╩пп
+     * Д╦┼Д╦─Х║▄
      */
     void preInfo();
 }

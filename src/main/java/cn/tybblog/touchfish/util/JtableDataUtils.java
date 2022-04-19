@@ -10,13 +10,13 @@ import java.util.List;
  */
 public class JtableDataUtils {
     /**
-     * Êé×ª±í¸ñÊı¾İÄ£ĞÍ
-     * @param books Êé
-     * @return Êı¾İÄ£ĞÍ
+     * ä¹¦è½¬è¡¨æ ¼æ•°æ®æ¨¡å‹
+     * @param books ä¹¦
+     * @return æ•°æ®æ¨¡å‹
      */
     public static DefaultTableModel bookToTableModel(List<Book> books){
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnIdentifiers(new String[]{"ÊéÃû", "×÷Õß"});
+        model.setColumnIdentifiers(new String[]{"ä¹¦å", "ä½œè€…"});
         for (Book book : books) {
             String[] row = new String[]{book.getBookName(), book.getAuth()};
             model.addRow(row);

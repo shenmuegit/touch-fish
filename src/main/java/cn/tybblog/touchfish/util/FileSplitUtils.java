@@ -11,29 +11,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * ÎÄ¼şÇĞ¸î¹¤¾ßÀà
+ * æ–‡ä»¶åˆ‡å‰²å·¥å…·ç±»
  * @author ly
  */
 public class FileSplitUtils {
 
-    /** ÕÂ½ÚÕıÔò */
-//    private static Pattern p = Pattern.compile("(^\\s*µÚ)(.{1,9})[ÕÂ½Ú¾í¼¯²¿Æª»Ø](\\s{1})(.*)($\\s*)");
-    /** ÈÛ¶ÏĞĞÊı */
+    /** ç« èŠ‚æ­£åˆ™ */
+//    private static Pattern p = Pattern.compile("(^\\s*ç¬¬)(.{1,9})[ç« èŠ‚å·é›†éƒ¨ç¯‡å›](\\s{1})(.*)($\\s*)");
+    /** ç†”æ–­è¡Œæ•° */
     private static int row = 200;
-    /** ÎÄ¼ş¶ÁÈ¡Æ÷ */
+    /** æ–‡ä»¶è¯»å–å™¨ */
     private static LineIterator lineIterator;
-    /** ÕÂ½Ú±êÌâ */
+    /** ç« èŠ‚æ ‡é¢˜ */
     private static String title;
-    /** »º´æÕÂ½Ú±êÌâ */
+    /** ç¼“å­˜ç« èŠ‚æ ‡é¢˜ */
     private static String cacheTitle;
-    /** »º´æĞĞÊı */
+    /** ç¼“å­˜è¡Œæ•° */
     private static String fileLine = "";
 
 
     /**
-     * ·Ö¸î±¾µØÊé¼®ÎÄ¼ş
-     * @param book ±¾µØÊé¼®
-     * @return ·Ö¸îºóÊé¼®
+     * åˆ†å‰²æœ¬åœ°ä¹¦ç±æ–‡ä»¶
+     * @param book æœ¬åœ°ä¹¦ç±
+     * @return åˆ†å‰²åä¹¦ç±
      */
     public static Book split(Book book) {
         File srcFile = new File(book.getUrl());
@@ -74,8 +74,8 @@ public class FileSplitUtils {
     }
 
     /**
-     * Ê¶±ğÕÂ½Ú
-     * @return ÕÂ½Ú±êÌâ
+     * è¯†åˆ«ç« èŠ‚
+     * @return ç« èŠ‚æ ‡é¢˜
      */
     private static boolean getChapterTitle(){
         PersistentState pstate = PersistentState.getInstance();
@@ -92,8 +92,8 @@ public class FileSplitUtils {
     }
 
     /**
-     * ¶ÁÈ¡ÏÂÒ»ĞĞ£¬Ìø¹ı¿ÕĞĞ
-     * @return ÎÄ¼şÏÂÒ»ĞĞÄÚÈİ
+     * è¯»å–ä¸‹ä¸€è¡Œï¼Œè·³è¿‡ç©ºè¡Œ
+     * @return æ–‡ä»¶ä¸‹ä¸€è¡Œå†…å®¹
      */
     private static String readline(){
         String line = lineIterator.nextLine().trim();

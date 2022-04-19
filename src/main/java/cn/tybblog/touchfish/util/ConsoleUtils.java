@@ -15,7 +15,7 @@ public class ConsoleUtils {
     private static PersistentState persistentState=PersistentState.getInstance();
     private static StatusBar statusBar;
     private static Project project;
-    /** ´æ·Å¿ØÖÆÌ¨JLabel */
+    /** å­˜æ”¾æ§åˆ¶å°JLabel */
     private static Map<Project, JLabel> map=new HashMap<>();
 
 
@@ -25,7 +25,7 @@ public class ConsoleUtils {
     }
 
     /**
-     * Êä³ö×Ö·û´®
+     * è¾“å‡ºå­—ç¬¦ä¸²
      * @param str
      */
     public static void info(String str){
@@ -33,7 +33,7 @@ public class ConsoleUtils {
             JLabel label = map.get(project);
             if (label == null) {
                 if (statusBar != null){
-                    statusBar.setInfo("Î´ÖªµÄÒì³£ÎŞ·¨Ê¹ÓÃ¿ØÖÆÌ¨");
+                    statusBar.setInfo("æœªçŸ¥çš„å¼‚å¸¸æ— æ³•ä½¿ç”¨æ§åˆ¶å°");
                 }
                 return;
             }

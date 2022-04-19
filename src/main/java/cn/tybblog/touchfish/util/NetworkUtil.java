@@ -6,6 +6,8 @@ import cn.tybblog.touchfish.entity.Chapter;
 import cn.tybblog.touchfish.exception.FishException;
 import cn.tybblog.touchfish.listener.EventListener;
 import com.intellij.openapi.ui.MessageDialogBuilder;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import okhttp3.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,49 +27,55 @@ public class NetworkUtil {
     private static PersistentState persistentState = PersistentState.getInstance();
 
     /**
-     * ËÑË÷Êé
-     * @param keyword ËÑË÷¹Ø¼ü´Ê
+     * æœç´¢ä¹¦
+     * @param keyword æœç´¢å…³é”®è¯
      * @return html
      */
     public static List<Book> SearchBook(String keyword){
-        //urlÆ´½Ó
-        String url=persistentState.getUrl()+"/modules/article/waps.php?searchkey="+keyword;
-        Document doc = Jsoup.parse(sendRequest(url));
-        Elements trs = doc.select("#checkform table tr");
-        List<Book> books = new ArrayList<Book>();
-        if (trs == null||trs.size()==0) {
-            return books;
-        }
-        //µÚÒ»¸ötrÎª±íÍ·£¬ÒÆ³ı
-        trs.remove(0);
-        for (Element tr : trs) {
-            Element bookName = tr.child(0);
-            Element auth = tr.child(2);
-            books.add(new Book(tr.selectFirst("td a").attr("href"), bookName.text(), auth.text()));
+        //urlæ‹¼æ¥
+        String url=persistentState.getUrl()+"/modules/article/search.php";
+        List<Book> books = new ArrayList<>();
+        try {
+            String param = "searchtype=keywords&searchkey=" + URLEncoder.encode(keyword,"UTF-8") + "&action=login";
+            Document doc = Jsoup.parse(postRequest(url,param));
+            Elements trs = doc.select(".detail");
+            if (trs == null||trs.size()==0) {
+                return books;
+            }
+            String bookName = doc.select(".header").get(0).select(".title").text();
+            String author = doc.select(".author").get(0).text();
+            String href = doc.select(".button").get(0).selectFirst("a").attr("href");
+            books.add(new Book(persistentState.getUrl() + href, bookName, author));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return books;
     }
 
     /**
-     * »ñÈ¡ÕÂ½Ú
-     * @param url Êé±¾µØÖ·
+     * è·å–ç« èŠ‚
+     * @param url ä¹¦æœ¬åœ°å€
      * @return html
      */
     public static List<Chapter> getChapter(String url){
         Document doc = Jsoup.parse(sendRequest(url));
-        Elements elements = doc.select("#list dl dd a");
+        Elements elements = doc.select("p");
         List<Chapter> chapters = new ArrayList<>();
         for (Element element : elements) {
-            Chapter chapter = new Chapter(persistentState.getUrl()+element.attr("href"),element.text());
+            Element a = element.select("a").first();
+            if(null == a){
+                continue;
+            }
+            Chapter chapter = new Chapter(url.substring(0,url.lastIndexOf("/") + 1) + a.attr("href"),a.text());
             chapters.add(chapter);
         }
         return chapters;
     }
 
     /**
-     * »ñÈ¡Êé±¾ÄÚÈİ
-     * @param url µØÖ·
-     * @param callback »Øµ÷Àà
+     * è·å–ä¹¦æœ¬å†…å®¹
+     * @param url åœ°å€
+     * @param callback å›è°ƒç±»
      */
     public static void getBookText(String url,ChapterCallback callback,String baseMethod){
         EventListener.loading=true;
@@ -75,10 +83,10 @@ public class NetworkUtil {
             @Override
             public void onFailure(Call call, IOException e) {
                 if (e instanceof SocketTimeoutException) {
-                    ConsoleUtils.info("¼ÓÔØ³¬Ê±");
+                    ConsoleUtils.info("åŠ è½½è¶…æ—¶");
                 }
                 if (e instanceof ConnectException || e instanceof UnknownHostException) {
-                    ConsoleUtils.info("ÍøÂçÁ¬½ÓÊ§°Ü»òÓòÃû´íÎó£¡");
+                    ConsoleUtils.info("ç½‘ç»œè¿æ¥å¤±è´¥æˆ–åŸŸåé”™è¯¯ï¼");
                 }
                 EventListener.loading=false;
                 e.printStackTrace();
@@ -87,9 +95,8 @@ public class NetworkUtil {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Document document = Jsoup.parse(response.body().string());
-                document.select("#content p").remove();
-                String html = document.select("#content").html();
-                String[] bookText = html.replaceAll("&nbsp;", "").replaceAll("\n<br>\n<br>", "").split(" \n<br> \n<br>");
+                String html = document.select("#nr1").html();
+                String[] bookText = html.replaceAll("&nbsp;", "").split("\n<br>\n<br>");
                 try {
                     callback.chapter(Arrays.asList(bookText),baseMethod);
                 } catch (FishException e) {
@@ -102,9 +109,9 @@ public class NetworkUtil {
 
 
     /**
-     * ·¢ËÍÒì²½ÇëÇó
+     * å‘é€å¼‚æ­¥è¯·æ±‚
      * @param url
-     * @param callback »Øµ÷º¯Êı
+     * @param callback å›è°ƒå‡½æ•°
      */
     public static void sendRequest(String url, Callback callback){
         Request request = new Request.Builder().url(url).build();
@@ -112,7 +119,7 @@ public class NetworkUtil {
     }
 
     /**
-     * ·¢ËÍÍ¬²½ÇëÇó
+     * å‘é€åŒæ­¥è¯·æ±‚
      * @param url
      */
     public static String sendRequest(String url){
@@ -122,10 +129,36 @@ public class NetworkUtil {
             return response.body().string();
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException) {
-                MessageDialogBuilder.yesNo("ÌáÊ¾", "¼ÓÔØ³¬Ê±£¡").show();
+                MessageDialogBuilder.yesNo("æç¤º", "åŠ è½½è¶…æ—¶ï¼").show();
             }
             if (e instanceof ConnectException || e instanceof UnknownHostException) {
-                MessageDialogBuilder.yesNo("ÌáÊ¾", "ÍøÂçÁ¬½ÓÊ§°Ü£¡").show();
+                MessageDialogBuilder.yesNo("æç¤º", "ç½‘ç»œè¿æ¥å¤±è´¥ï¼").show();
+            }
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    /**
+     * å‘é€åŒæ­¥è¯·æ±‚
+     * @param url
+     */
+    public static String postRequest(String url,String param){
+        Request request = new Request.Builder().url(url)
+            .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"),param)).build();
+        try {
+            Response response = client.newCall(request).execute();
+            if(302 == response.code()){
+                String location = response.header("Location");
+                return postRequest(location,"");
+            }
+            return response.body().string();
+        } catch (IOException e) {
+            if (e instanceof SocketTimeoutException) {
+                MessageDialogBuilder.yesNo("æç¤º", "åŠ è½½è¶…æ—¶ï¼").show();
+            }
+            if (e instanceof ConnectException || e instanceof UnknownHostException) {
+                MessageDialogBuilder.yesNo("æç¤º", "ç½‘ç»œè¿æ¥å¤±è´¥ï¼").show();
             }
             e.printStackTrace();
             return e.getMessage();
