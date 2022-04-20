@@ -1,25 +1,30 @@
 package cn.tybblog.touchfish.entity;
 
 import cn.tybblog.touchfish.exception.FishException;
+import cn.tybblog.touchfish.listener.EventListener;
 import cn.tybblog.touchfish.util.ChapterCallback;
+import cn.tybblog.touchfish.util.ConsoleUtils;
 import cn.tybblog.touchfish.util.FileCode;
 import cn.tybblog.touchfish.util.NetworkUtil;
+import java.util.Arrays;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 public class Book {
     private String url;
     private String bookName;
-    public static String FILE_AUTH="自定义导入";
+    public static String FILE_AUTH = "自定义导入";
     private String auth;
     private Integer index;
     private List<Chapter> chapters;
 
-    public static String BASE_METHOD_PRE="pre";
-    public static String BASE_METHOD_NEXT="next";
+    public static String BASE_METHOD_PRE = "pre";
+    public static String BASE_METHOD_NEXT = "next";
 
     public String getUrl() {
         return url;
@@ -74,75 +79,80 @@ public class Book {
 
     /**
      * 获取当前章节
-     * @return
+     *
      */
     public Chapter getChapterByIndex() throws FishException {
-        if (chapters==null||chapters.size()==0){
+        if (chapters == null || chapters.size() == 0) {
             FishException.throwFishException("章节为空");
         }
-        if(index>=chapters.size()){
-            index=chapters.size()-1;
+        if (index >= chapters.size()) {
+            index = chapters.size() - 1;
         }
-        return chapters.get(index<0?0:index);
+        return chapters.get(index < 0 ? 0 : index);
     }
 
     /**
      * 加载章节
+     *
      * @param callback 异步回调文章内容
      * @return 文章内容
      */
-    public List<String> loadChapter(ChapterCallback callback,String baseMethod) throws FishException {
+    public List<String> loadChapter(ChapterCallback callback)
+        throws FishException {
         List<String> bookText = new ArrayList<>();
         Chapter chapter = getChapterByIndex();
-        if (chapter==null){
+        if (chapter == null) {
             FishException.throwFishException("章节为空，请重新添加");
         }
-        if (!auth.equals(FILE_AUTH)&&index>=chapters.size()-1){
+        if (!auth.equals(FILE_AUTH) && index >= (chapters.size() - 1)) {
             //网络书籍，获取最新章节，可能正在更新
-            chapters=NetworkUtil.getChapter(url);
+            chapters = NetworkUtil.getChapter(url);
             chapter = getChapterByIndex();
         }
-        if(auth.equals(FILE_AUTH)){
+        if (auth.equals(FILE_AUTH)) {
             try {
-                bookText=FileUtils.readLines(new File(chapter.getUrl()), FileCode.codeString(chapter.getUrl()));
+                bookText = FileUtils.readLines(new File(chapter.getUrl()),
+                    FileCode.codeString(chapter.getUrl()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            NetworkUtil.getBookText(chapter.getUrl(),callback,baseMethod);
-            FishException.throwFishException("加载中...");
+            String res = NetworkUtil.sendRequest(chapter.getUrl());
+            Document document = Jsoup.parse(res);
+            String html = document.select("#nr1").html();
+            String[] bookTexts = html.replaceAll("&nbsp;", "").split("\n<br>\n<br>");
+            try {
+                callback.chapter(Arrays.asList(bookTexts));
+            } catch (FishException e) {
+                ConsoleUtils.info(e.getMessage());
+                EventListener.loading=false;
+            }
         }
         return bookText;
     }
 
-    /**
-     * 下一章
-     * @param callback 异步回调文章内容
-     * @return 文章内容
-     */
-    public List<String> nextChapter(ChapterCallback callback) throws FishException {
-        if(index>=chapters.size()){
-            return loadChapter(callback,BASE_METHOD_NEXT);
+    public Chapter next() throws FishException {
+        if (index >= chapters.size()) {
+            return getChapterByIndex();
         }
         index++;
-        return loadChapter(callback,BASE_METHOD_NEXT);
+        Chapter chapter = getChapterByIndex();
+        chapter.setRow(-1);
+        return chapter;
     }
 
-    /**
-     * 上一章
-     * @param callback 异步回调文章内容
-     * @return 文章内容
-     */
-    public List<String> preChapter(ChapterCallback callback) throws FishException {
-        if(index<0){
-            FishException.throwFishException("到顶了哦");
+    public Chapter pre() throws FishException {
+        if (index < 0) {
+            return getChapterByIndex();
         }
         index--;
-        return loadChapter(callback,BASE_METHOD_PRE);
+        Chapter chapter = getChapterByIndex();
+        chapter.setRow(-1);
+        return chapter;
     }
 
     public String nextIndex() throws FishException {
-        if (index<chapters.size()) {
+        if (index < chapters.size()) {
             index++;
         } else {
             return "已经是最后一章了";
@@ -152,7 +162,7 @@ public class Book {
     }
 
     public String preIndex() throws FishException {
-        if(index<0){
+        if (index < 0) {
             return "已经是第一章了";
         }
         index--;

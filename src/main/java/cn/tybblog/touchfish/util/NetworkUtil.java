@@ -66,56 +66,14 @@ public class NetworkUtil {
             if(null == a){
                 continue;
             }
-            Chapter chapter = new Chapter(url.substring(0,url.lastIndexOf("/") + 1) + a.attr("href"),a.text());
+            String text = a.text();
+            if(text.contains("页面底部")){
+                continue;
+            }
+            Chapter chapter = new Chapter(url.substring(0,url.lastIndexOf("/") + 1) + a.attr("href"),text);
             chapters.add(chapter);
         }
         return chapters;
-    }
-
-    /**
-     * 获取书本内容
-     * @param url 地址
-     * @param callback 回调类
-     */
-    public static void getBookText(String url,ChapterCallback callback,String baseMethod){
-        EventListener.loading=true;
-        sendRequest(url, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (e instanceof SocketTimeoutException) {
-                    ConsoleUtils.info("加载超时");
-                }
-                if (e instanceof ConnectException || e instanceof UnknownHostException) {
-                    ConsoleUtils.info("网络连接失败或域名错误！");
-                }
-                EventListener.loading=false;
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Document document = Jsoup.parse(response.body().string());
-                String html = document.select("#nr1").html();
-                String[] bookText = html.replaceAll("&nbsp;", "").split("\n<br>\n<br>");
-                try {
-                    callback.chapter(Arrays.asList(bookText),baseMethod);
-                } catch (FishException e) {
-                    ConsoleUtils.info(e.getMessage());
-                    EventListener.loading=false;
-                }
-            }
-        });
-    }
-
-
-    /**
-     * 发送异步请求
-     * @param url
-     * @param callback 回调函数
-     */
-    public static void sendRequest(String url, Callback callback){
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(callback);
     }
 
     /**
@@ -125,8 +83,12 @@ public class NetworkUtil {
     public static String sendRequest(String url){
         Request request = new Request.Builder().url(url).build();
         try {
-            Response response = client.newCall(request).execute();
-            return response.body().string();
+            for (int i = 0; i < 3; i++) {
+                Response response = client.newCall(request).execute();
+                if(200 == response.code()){
+                    return response.body().string();
+                }
+            }
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException) {
                 MessageDialogBuilder.yesNo("提示", "加载超时！").show();
@@ -137,6 +99,7 @@ public class NetworkUtil {
             e.printStackTrace();
             return e.getMessage();
         }
+        return null;
     }
 
     /**

@@ -141,6 +141,9 @@ public class PersistentState implements PersistentStateComponent<PersistentState
         if (index<0||index>book.size()) {
             return false;
         }
+        if(book.isEmpty()){
+            return true;
+        }
         if (Book.FILE_AUTH.equals(book.get(index).getAuth())) {
             for (Chapter chapter : book.get(index).getChapters()) {
                 new File(chapter.getUrl()).delete();

@@ -1,11 +1,23 @@
 package cn.tybblog.touchfish.entity;
 
+import java.util.List;
+
 public class Chapter {
     private String url;
     private String title;
     private Integer row;
+    private List<String> rowContents;
 
     public Chapter() {
+    }
+
+    public List<String> getRowContents() {
+        return rowContents;
+    }
+
+    public void setRowContents(List<String> rowContents) {
+        this.rowContents = rowContents;
+        this.row = -1;
     }
 
     public Chapter(String url, String title) {
@@ -38,17 +50,39 @@ public class Chapter {
         this.row = row;
     }
 
-    public int nextRow(){return ++row;}
+    public String next(){
+        if(null == rowContents){
+            return null;
+        }
+        int index = nextRow();
 
-    public int preRow(){
-        if (row<0){
+        if(index >= rowContents.size()){
+            return null;
+        }
+        return rowContents.get(index);
+    }
+
+    public String pre(){
+        int index = preRow();
+        if(index > rowContents.size()){
+            return null;
+        }
+        return rowContents.get(Math.max(0, index));
+    }
+
+    public int nextRow() {
+        return ++row;
+    }
+
+    public int preRow() {
+        if (row < 0) {
             return row;
         }
         return --row;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return title.trim();
     }
 }

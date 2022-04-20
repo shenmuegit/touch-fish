@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface ChapterCallback {
 
-    void chapter(List<String> bookText,String baseMethod) throws FishException;
+    void chapter(List<String> bookText) throws FishException;
 }
