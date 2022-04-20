@@ -57,6 +57,7 @@ public class Chapter {
         int index = nextRow();
 
         if(index >= rowContents.size()){
+            row = -1;
             return null;
         }
         return rowContents.get(index);
@@ -65,6 +66,7 @@ public class Chapter {
     public String pre(){
         int index = preRow();
         if(index > rowContents.size()){
+            row = -1;
             return null;
         }
         return rowContents.get(Math.max(0, index));

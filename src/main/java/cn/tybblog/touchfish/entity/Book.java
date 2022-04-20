@@ -122,7 +122,8 @@ public class Book {
             String html = document.select("#nr1").html();
             String[] bookTexts = html.replaceAll("&nbsp;", "").split("\n<br>\n<br>");
             try {
-                callback.chapter(Arrays.asList(bookTexts));
+                bookText = Arrays.asList(bookTexts);
+                callback.chapter(bookText);
             } catch (FishException e) {
                 ConsoleUtils.info(e.getMessage());
                 EventListener.loading=false;
